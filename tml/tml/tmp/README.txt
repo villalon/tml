@@ -1,0 +1,1 @@
+Directory for temporary file processing. Files are obtained from the uploaded dir and then sent to the processed dir if successful.

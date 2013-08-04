@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" 
+        	author="true" 
+        	classpath="C:\Users\Jorge\.m2\repository\commons-cli\commons-cli\1.2\commons-cli-1.2.jar;C:\Users\Jorge\.m2\repository\org\htmlparser\htmlparser\1.6\htmlparser-1.6.jar;C:\Users\Jorge\.m2\repository\log4j\log4j\1.2.14\log4j-1.2.14.jar;C:\Users\Jorge\.m2\repository\edu\mit\jwi\jwi\2.1.5\jwi-2.1.5.jar;C:\Users\Jorge\.m2\repository\org\apache\lucene\lucene-core\2.4.1\lucene-core-2.4.1.jar;C:\Users\Jorge\.m2\repository\stanford\stanford-parser\1.6.1\stanford-parser-1.6.1.jar;C:\Users\Jorge\.m2\repository\de\danielnaber\languagetool\1.0.0\languagetool-1.0.0.jar;C:\Users\Jorge\.m2\repository\org\apache\lucene\lucene-snowball\2.4.1\lucene-snowball-2.4.1.jar;C:\Users\Jorge\.m2\repository\org\apache\lucene\lucene-analyzers\2.4.1\lucene-analyzers-2.4.1.jar;C:\Users\Jorge\.m2\repository\net\sourceforge\segment\1.3.0\segment-1.3.0.jar;C:\eclipse\plugins\org.hamcrest.core_1.1.0.v20090501071000.jar;C:\Users\Jorge\.m2\repository\commons-logging\commons-logging\1.1.1\commons-logging-1.1.1.jar;C:\Users\Jorge\.m2\repository\nz\ac\waikato\cs\weka\3.5.6\weka-3.5.6.jar;C:\Users\Jorge\.m2\repository\org\carrot2\morfologik-stemming\1.2.2\morfologik-stemming-1.2.2.jar;C:\Users\Jorge\.m2\repository\mysql\mysql-connector-java\5.1.13\mysql-connector-java-5.1.13.jar;C:\Users\Jorge\.m2\repository\commons-lang\commons-lang\2.4\commons-lang-2.4.jar;C:\Users\Jorge\.m2\repository\jama\jama\1.0.2\jama-1.0.2.jar;C:\eclipse\plugins\org.junit_4.8.1.v4_8_1_v20100427-1100\junit.jar"
+        	destdir="doc" 
+        	doctitle="TML documentation" 
+        	nodeprecated="false" 
+        	nodeprecatedlist="false" 
+        	noindex="false" 
+        	nonavbar="false" 
+        	notree="false" 
+        	packagenames="tml.utils,tml.vectorspace.factorisation,tml.vectorspace.operations.results,tml.vectorspace.operations.summarization,tml.sql,tml.vectorspace.operations,tml.storage.importers,tml.vectorspace.operations.visualizations,tml.corpus,tml.vectorspace,tml.annotators,tml.storage"
+        	source="1.6" 
+        	sourcefiles="src/main/java/tml/test/AbstractTmlIndexingTest.java,src/main/java/tml/Configuration.java,src/main/java/SemanticSpace.java,src/main/java/tml/test/AbstractTmlOperationTest.java,src/main/java/TmlCommandLine.java" 
+        	sourcepath="src/test/java;src/main/java" 
+        	splitindex="true" 
+        	use="true" 
+        	version="true"/>
+    </target>
+</project>

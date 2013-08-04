@@ -1,0 +1,229 @@
+- Introduction
+
+        las2: sparse svd via single-vector Lanczos algorithm with
+              selective re-orthogonalization.
+
+	las2.c is an ANSI-C code designed to find some eigenvalues
+	and eigenvectors of a linear operator opb that is real
+	symmetric. This codes is a re-write of the lanso code (in
+        Fortran-77) distributed by B. Parlett and his colleagues at
+        UC-Berkeley.  
+
+        In las2.c, the operator B is assumed to be of the form
+
+                 B =  A'A,   where A is m by n (m>>n) and sparse.
+
+        Hence, the singular triplets of A are computed as the eigenpairs
+        of B.  The eigenvalues of B are the squares of the singular values of
+        A, the eigenvectors correspond to the right singular vectors only.
+        The left singular vectors of A are then determined by
+
+                          u = 1/sigma A*v,
+
+        where {u,sigma,v} is a singular triplet of A.
+
+	las2.c implements the simple lanczos algorithm with Simon's
+        selective orthogonalization to actively maintain extended
+        semi-orthogonality amongst the computed Lanczos vectors.
+
+	These methods are most efficient when only a modest fraction
+        (less than 1/4th) of the B-eigenpairs are wanted.  One potentially 
+        useful feature of both codes are their delivery of certain
+	certain eigenvalues not yet good to full precision, for some 
+	tasks they are often good enough.
+
+	The largest eigenvalues of B tend to be captured before the small ones
+	but convergence depends on separation ratios and these vary with
+	the application.   las2.c will find eigenvalues of multiplicity
+        greater than one, but the copies stabilize one at a time, the 
+        interval between copies depends on the problem and wordlength. 
+        Experience suggests the gap is between 4 and 20 steps.
+
+- User-supplied routines
+
+        For las2.c, the user must specify multiplication by both
+        matrix B and A only (subroutines opb and opa, respectively).
+
+	The specification of opb should look something like
+
+                void opb(long n,double *x, double *y);
+
+	so that opb takes a vector x and returns y = B*x, where
+        B is the appropriate matrix (see above).
+
+	The specification of opa should look something like
+
+                void opa(double *x, double *y);
+
+	so that opa takes a vector x and returns y = A*x.
+
+	Subroutine opb will be called with n always equal to the
+	dimension of the eigenproblem solved. In las2.c we use
+        the Harwell-Boeing sparse matrix format for accessing
+        elements of the nrow by ncol sparse matrix A and its
+        transpose (denoted A').  Other sparse matrix formats can be 
+        used, of course.
+
+	If secondary storage (such as a disk drive) must be used to
+	store the computed Lanczos vectors, subroutine "store"
+	must be supplied by the user in place of our trivially-
+	implemented store which assumes the existence of virtual
+	memory.  The specification of store in las2.c is
+	 
+               void store(long n, long isw, long j, double *s);
+	 
+	where
+	n	... the dimension of the eigenproblem (ncol, for nrow>>ncol),
+	isw	... action type switch, can only be 1, 2, 3 or 4.
+		    isw = 1 requests storing of j-th lanczos vector q(j),
+		    isw = 2 requests retrieval of j-th lanczos vector q(j),
+		    isw = 3 requests storing of m*q(j) for j = 1 or 2,
+		    isw = 4 requests retrieval of m*q(j) for j = 1 or 2.
+	j	... index of the j-th lanczos vector,
+	s	... the n-vector to be stored/retrieved.
+
+- Termination 
+
+	las2.c will terminate if either
+
+	1) maxprs eigenpairs have been found, or
+	2) lanmax lanczos steps have been taken, or
+	3) two ritz values inside [endl,endr] have stabilized.
+
+	whichever occurs first.  Note that an eigenvalue of multiplicity
+	higher than one may not have all its copies delivered.
+
+- Acknowledgements
+
+	Beresford Parlett and his colleagues (David Scott, Horst Simon,
+	Bahram Nour-Omid, John Lewis, and Jeremy Du Croz) are to be credited
+	for the LANSO strategy and initial Fortran-77 code from which
+        las1.c and las2.c eventually evolved.
+
+- Information 
+
+        Please address all questions, comments, or corrections to:
+
+        M. W. Berry
+        Department of Computer Science
+        University of Tennessee
+        107 Ayres Hall
+        Knoxville, TN  37996-1301
+        email: berry@cs.utk.edu
+        phone: (615) 974-5067
+
+-File descriptions
+
+        las2.c requires the include file las1.h for compilation.
+        The input and output files associated with las2.c are
+        listed below.
+
+             Code           Input         Output
+            ------      ------------    ---------
+            las2.c      lap2, matrix    lao2,lav2
+
+
+       The binary output files lav2 (which contains the 
+       approximate right singular vectors followed by the ap-
+       proximate left singular vectors) will be created by
+       las2.c if it does not already exist.  If you are
+       running on a Unix-based workstation you should uncomment
+       the line
+
+                 /*   #define  UNIX_CREAT */
+
+       in the declarations prior to main() in las2.c.
+       UNIX_CREAT specifies the use of the UNIX "creat" system
+       routine with the permissions defined by the PERMS constant
+
+                  #define PERMS 0664
+
+       You may adjust PERMS for the desired permissions on the
+       lav2 file (default is Read/Write for user and group,
+       and Read for others).  Subsequent runs will be able to
+       open and overwrite these files with the default permissions.
+
+       las2.c obtains its parameters specifying the
+       sparse SVD problem to be solved from the input file
+       lap2.  This parameter files contains the single line
+
+	 <name> lanmax maxprs endl endr vectors kappa
+
+       where 
+
+        <name>     is the name of the data set; 
+        lanmax     is an integer specifying maximum number of lanczos
+                   step allowed;
+        maxprs     indicates  maximum number of singular triplets of A 
+                   (eigenpairs of the equivalent matrix B) desired; 
+        endl,endr  are two end-points of an interval within which all 
+                   unwanted eigenvalues of the particular matrix B lie; 
+        vectors    contains the string TRUE or FALSE to indicate when 
+                   singular triplets are needed (TRUE) and when only 
+                   singular values are needed (FALSE);
+        kappa      contains the relative accuracy of ritz values 
+                   acceptable as eigenvalues of the matrix B.
+        
+- Sparse matrix format
+
+        las2.c is designed to read input matrices that are stored
+        in the Harwell-Boeing sparse matrix format.  The nonzeros
+        of such matrices are stored in a compressed column-oriented
+        format.  The row indices and corresponding nonzero values
+        are stored by columns with a column start index array
+        whose entries contain pointers to the nonzero starting each
+        column.  las2.c reads the sparse matrix data from the input
+        file called "matrix".
+
+        Each input file "matrix" should begin with a four-line header
+        record followed by three more records containing, in order, 
+        the column-start pointers, the row indices, and the nonzero
+        numerical values.
+
+        The first line of the header consists of a 72-character title
+        and an 8-character key by which the matrices are referenced.
+        The second line can be used for comments or to indicate record
+        length for each index or value array.  Although this line is 
+        generally ignored, A CHARACTER MUST BE PLACED ON THAT LINE.
+        The third line contains a three-character string denoting the
+        matrix type and the three integers specifying the number of rows,
+        columns, and nonzeros.  The fourth line which usually contains
+        input format for Fortran-77 I/O is ignored by our ANSI-C code.
+        The exact format is
+
+		"%72c %*s %*s %*s %d %d %d %*d"
+
+	for the first three lines of the header,
+
+		line 1      <title>         <key>
+		 	(col.  1 - 72) (col. 73 - 80)
+
+		line 2   <string>
+
+		line 3   <matrix type> nrow ncol nnzero 
+
+	and 
+
+		"%*s %*s %*s %*s"
+
+	for the last line of the header.
+
+		line 4   <string1> <string2> <string3> <string4>
+
+        Even though only the title and the integers specifying the
+        number of rows, columns, and nonzero elements are read, other
+        strings of input must be present in indicated positions.
+        Otherwise, the format of the "fscanf" statements must be 
+        changed accordingly.
+
+-Recommendation
+
+        Keep in mind that matrix B is of the form (' denotes transposition)
+
+           B= [O  A], for las1.c and  B= A'A for las2.c.
+              [A' O]
+
+        When ill-conditioning is not likely, we recommend the use
+        of las2.c (smaller eigensystems and less memory).  Otherwise,
+        we suggest that you use las1.c which is a root-free method
+        yet approximates +/- pairs of each singular value of A.

@@ -1,0 +1,1 @@
+This directory is visited by the indexer thread to check for new files to add to the repository

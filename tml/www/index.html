@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>TML - Text Mining Library for LSA (Latent Semantic Analysis)</title>
+<link rel=stylesheet href="tml.css" type="text/css">
+</head>
+<body>
+<div id="body">
+<div id="title">
+<h1>TML - Text Mining Library for LSA (Latent Semantic Analysis)</h1>
+<p>TML is a TM library for LSA written in Java which is focused on ease of use, scalability and extensibility. 
+TML is maintained by <a href="http://www.villalon.cl">Jorge Villal&oacute;n</a> and is part of a development effort by the University of Sydney, <a href="http://sydney.edu.au/engineering/latte/">Learning and Affect Technologies Group</a>.</p>
+<h2>Ease of use</h2>
+<p>TML aims to help <b>developers</b> write applications that use TM techniques,
+ without having to be an expert in the area and with no licensing problems (TML is Apache v2.0).
+TML also aims to help <b>researchers</b> to speed up their experimenting providing a platform 
+they can trust (validated using academic papers) so they can focus on their new ideas.</p>
+<h2>Scalability</h2>
+<p>One of the biggest problems in TM is that many algorithms are computationally expensive.
+TML doesn't solve this problem, however it tackles scalability by decoupling the most
+complicated processes.</p>
+<p>TML is integrated with the high performance Apache's Lucene search engine for high speed
+document indexing and corpus definition (the documents you'll work on). Lucene can be
+scaled to eat the whole WWW so it has no limits, and TML defines a corpus as a set of
+search results so document selection happens incredibly fast.</p>
+<p>TML has a parallel process that adds annotations on demand, for example if you want to
+use Part Of Speech tags (POS), you can run the annotator offline and only when you know
+the server will be ok. In this way TML will always respond, and will use new data
+as it becomes available.</p>
+<p>Finally, TML caches models (SVD and NMF decompositions) for faster execution.</p>
+<h2>Extensibility</h2>
+<p>TML can be easily extended in many ways at every step.</p>
+<ul>
+<li>New analyzers can be added to Lucene for different tokenizing, stemming, etc.</li>
+<li>New term weighting schemes can be added to TML when building a VSM (term-doc matrix).</li>
+<li>New annotators can be easily added to extract information from documents.</li>
+<li>New factorisations can be added for LSA style research.</li>
+<li>New operations can be easily added to put them all together.</li>
+</ul>
+<h2>Implemented operations</h2>
+<p>TML already implements several operations:</p>
+<ul>
+<li>LSA based distances between passages</li>
+<li>Topic extraction and clustering</li>
+<li>Automatic extraction of Concept Maps</li>
+</ul>
+<p>
+It is able to create semantic spaces from a corpus of documents, and use that space as background knowledge to calculate semantic distances within the same corpus or on a different one.
+TML processes all documents at three levels: Document, paragraph and sentence. This means that corpora can be created using whole documents, its parts or a combination of both.</p>
+<p>TML is built on top of <a href="http://lucene.apache.org/">Lucene</a> therefore it can perform any search to create a corpus.
+In other words, you can build a corpus with all the sentences of all the documents that contain the word <i>dog</i>.</p>
+<p>TML also uses grammatical information from the <a href="http://nlp.stanford.edu/software/lex-parser.shtml">Stanford parser</a> at the sentence level, so each sentence contains its own PennTree string.
+This allows to reconstruct the grammatical tree in a fast way to perform grammatical operations.</p>
+</div>
+<h2>Download</h2>
+<p>You can download the latest version of tml <a href="https://sourceforge.net/projects/tml-java/">here</a>.</p>
+<h2>Quick start guide</h2>
+<p>In order to use TML, the easiest way is to use it as a command line tool. In order to do this you need:</p>
+<ul>
+  <li>Have java properly installed, version 1.6 or above is required. To check your version you can run:
+  <br/>
+  <br/>
+  <i>java -version</i>
+  <br/>&nbsp;
+  </li>
+  <li>Have MySql properly installed and working. You can check this by running:</li>
+  <br/>
+  <i>mysql -u root</i>
+  <br/>
+  <br/>&nbsp; (You may need to add the -p option if the root account has a password)
+  <br/>&nbsp; 
+  <li>Download the latest TML distribution from a zip file in the <a href="https://sourceforge.net/projects/tml-java/">download page</a>.<br/>&nbsp; </li>
+  <li>Unzip the content and check the README.txt for installation instructions.</li>
+</ul>
+<h2>Using TML from the command line</h2>
+<p>You can execute TML from the command line with the following command:</p>
+<i>java -jar tml-xxx.jar</i>
+<p>Adding documents to a repository</p>
+<i>java -jar tml-xxx.jar -I -repo /path/to/repository --idocs /path/to/txt/files</i>
+<p>Executing operations on a corpus</p>
+<i>java -jar tml-xxx.jar -O -repo /path/to/repository --ocorpus type:document --odim NUM --odimth 2 --operations PassagesSimilarity</i>
+<p>For a full list of the available operations, check the package tml.vectorspace.operations in the <a href="doc">API docs</a>.</p>
+<h2>Using TML from a Java program</h2>
+<p>To use TML from another java program you have to include TML in your classpath.
+ You can use the provided tml-xxx-core.jar that does not include dependencies to avoid conflicting jars and save disk space.</p>
+<h3>Simple program that adds documents to a repository:</h3>
+<div class="code">
+import tml.storage.*;<br/>
+<br/>
+public class AddingFilesToRepository {<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;public static void main(String[] args) throws Exception {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Repository repository = new Repository("path/to/repository");<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;repository.addDocumentsInFolder("path/to/txt/files");<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Documents added to repository successfully!");<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+}<br/>
+</div>
+<h3>Simple program that runs an operation with the documents in the repository:</h3>
+<div class="code">
+import tml.vectorspace.TermWeighting.GlobalWeight;<br/>
+import tml.vectorspace.TermWeighting.LocalWeight;<br/>
+import tml.annotators.PennTreeAnnotator;<br/>
+import tml.corpus.SearchResultsCorpus;<br/>
+import tml.corpus.CorpusParameters.DimensionalityReduction;<br/>
+import tml.corpus.CorpusParameters.TermSelection;<br/>
+import tml.storage.Repository;<br/>
+<br/>
+public class PerformingOperationOnCorpus {<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;public static void main(String[] args) throws Exception {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Repository repository = new Repository("path/to/repository");<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SearchResultsCorpus corpus = new SearchResultsCorpus("type:document");<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.getParameters().setTermSelectionCriterion(TermSelection.DF);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.getParameters().setTermSelectionThreshold(0);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.getParameters().setDimensionalityReduction(DimensionalityReduction.NUM);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.getParameters().setDimensionalityReductionThreshold(50);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.getParameters().setTermWeightGlobal(GlobalWeight.Entropy);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.getParameters().setTermWeightLocal(LocalWeight.LOGTF);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corpus.load(repository);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Corpus loaded and Semantic space calculated");<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Total documents:" + corpus.getPassages().length);<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PassagesSimilarity distances = new PassagesSimilarity();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distances.setCorpus(corpus);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distances.start();<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distances.printResults();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+}<br/>
+</div>
+</div>
+</body>
+</html>

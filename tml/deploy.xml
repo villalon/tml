@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="TML core" default="create_jar">
+	<property name="version" value="3.1" />
+	<property name="maven_repo" value="C:/Users/Jorge/.m2/repository" />
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	<target name="create_jar">
+		<jar destfile="target/tml-${version}-core.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Class-Path" value="." />
+				<attribute name="Built-By" value="Jorge Villalon" />
+				<attribute name="Specification-Title" value="Text Mining Libary - Command Line" />
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Specification-Vendor" value="www.villalon.cl" />
+				<attribute name="Implementation-Title" value="common" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="Jorge Villalon" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+		<jar destfile="target/tml-${version}.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="TmlCommandLine" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Built-By" value="Jorge Villalon" />
+				<attribute name="Specification-Title" value="Text Mining Libary - Command Line" />
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Specification-Vendor" value="www.villalon.cl" />
+				<attribute name="Implementation-Title" value="common" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="Jorge Villalon" />
+			</manifest>
+			<fileset dir="bin" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/org/apache/lucene/lucene-analyzers/2.4.1/lucene-analyzers-2.4.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/org/apache/lucene/lucene-snowball/2.4.1/lucene-snowball-2.4.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/log4j/log4j/1.2.14/log4j-1.2.14.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/commons-digester/commons-digester/2.0/commons-digester-2.0.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/edu/mit/jwi/jwi/2.1.5/jwi-2.1.5.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/jama/jama/1.0.2/jama-1.0.2.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/mysql/mysql-connector-java/5.1.13/mysql-connector-java-5.1.13.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/nz/ac/waikato/cs/weka/3.5.6/weka-3.5.6.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${maven_repo}/org/htmlparser/htmlparser/1.6/htmlparser-1.6.jar" />
+			<zipfileset excludes="META-INF/*" src="${maven_repo}/de/danielnaber/languagetool/1.0.0/languagetool-1.0.0.jar" />
+			<zipfileset excludes="META-INF/*" src="${maven_repo}/org/carrot2/morfologik-stemming/1.2.2/morfologik-stemming-1.2.2.jar" />
+			<zipfileset excludes="META-INF/*" src="${maven_repo}/net/sourceforge/segment/1.3.0/segment-1.3.0.jar" />
+			<zipfileset excludes="META-INF/*" src="${maven_repo}/stanford/stanford-parser/1.6.1/stanford-parser-1.6.1.jar" />
+		</jar>
+		<zip destfile="target/tml-${version}.zip">
+			<zipfileset dir="tml/" includes="**/*" prefix="tml/"/>
+			<zipfileset dir="target" prefix="tml/" includes="tml-${version}.jar"/>
+			<zipfileset dir="target" prefix="tml/" includes="tml-${version}-core.jar"/>
+		</zip>
+	</target>
+	<target name="deploy_www" depends="create_jar">
+		<scp
+			todir="jvillalon@web.sourceforge.net:/home/project-web/tml-java/htdocs"
+			trust="yes">
+			<fileset dir="www"/>
+		</scp>
+	</target>
+</project>

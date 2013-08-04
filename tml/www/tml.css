@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+BODY {
+	font-family: verdana;
+	font-size: small;
+	width: 50%;
+}
+
+H1, H2 {
+	background-color: #CCCCCC;
+	color: black;
+}
+
+.code {
+	background-color: #EEEEEE;
+	font-family: monospace;
+}

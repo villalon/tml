@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<rules>
+    <erule name="Compound Conjunctions" order="5" actionByName="MERGE_VERTICES_INFIX"
+		singleEdge="true" infix="conj_(.*)" positionDifference="2" leftPOS="NN.*" rightPOS="NN.*">
+		<pattern>conj_and</pattern>
+	</erule>
+    <erule name="Compound Preposition" order="6" actionByName="MERGE_VERTICES_INFIX"
+		sindleEdge="false" infix="prep_(.*)" positionDifference="2" leftPOS="NN.*" rightPOS="NN.*">
+		<pattern>prep_of</pattern>
+	</erule>
+	<erule name="Compound Nouns" order="10" actionByName="MERGE_VERTICES" positionDifference="1">
+		<pattern>amod</pattern>
+		<pattern>nn</pattern>
+		<pattern>number</pattern>
+		<pattern>num</pattern>
+		<!-- <pattern>poss</pattern>
+	-->
+	</erule>
+	<erule name="Negated Verbs" order="14" actionByName="MERGE_VERTICES" positionDifference="1">
+		<pattern>neg</pattern>
+	</erule>
+	<erule name="Compound Verbs" order="15" actionByName="MERGE_VERTICES" positionDifference="1" leftPOS="VB.*" rightPOS="VB.*">
+		<pattern>advmod</pattern>
+		<pattern>aux</pattern>
+		<pattern>auxpass</pattern>
+	</erule>
+	<erule name="Remove determiners" order="20" actionByName="SUBDUE_TARGET" positionDifference="1">
+		<pattern>det</pattern>
+	</erule>
+	<!--<varule name="Secondary relationships" order="101"
+		actionByName="MERGE_ALL_TARGETS_INFIX" infix="conj_(.*)">
+		<pattern>conj_and,dep</pattern>
+	</varule>
+	<vtrule name="Prep prep seq" order="100"
+		actionByName="CREATE_RELATIONSHIP" infix="prep\w?_(.*)">
+		<pattern>nsubj,prep\w?_.*,prep\w?_.*</pattern>
+	</vtrule>
+	<vtrule name="Dobj Prep seq" order="99"
+		actionByName="CREATE_RELATIONSHIP" infix="prep\w?_(.*)">
+		<pattern>nsubj,dobj,prep\w?_.*</pattern>
+	</vtrule>
+	<vrule name="Prepositional relationships" order="105"
+		actionByName="CREATE_RELATIONSHIP">
+		<pattern>nsubj,prep.*</pattern>
+	</vrule>
+	<vrule name="Verbal relationships" order="106"
+		actionByName="CREATE_RELATIONSHIP">
+		<pattern>nsubj,dobj</pattern>
+	</vrule>
+	<vrule name="Verbal copula relationships" order="107"
+		actionByName="CREATE_RELATIONSHIP_SWAP_LINK_TARGET">
+		<pattern>nsubj,cop</pattern>
+	</vrule>
+--></rules>
